@@ -434,16 +434,6 @@ export default function HomePage() {
         await handleCallCleanup();
       });
 
-      uvSession.addEventListener('disconnect', async () => {
-        await logCallToWallet('SESSION_DISCONNECT_EVENT');
-        await handleCallCleanup();
-      });
-
-      uvSession.addEventListener('close', async () => {
-        await logCallToWallet('SESSION_CLOSE_EVENT');
-        await handleCallCleanup();
-      });
-
       const handleCallCleanup = async () => {
         if (currentTranscriptsRef.current.length > 0 && user) {
           await saveCallMemory(currentTranscriptsRef.current);

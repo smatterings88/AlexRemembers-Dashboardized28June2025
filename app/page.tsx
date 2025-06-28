@@ -83,11 +83,11 @@ export default function HomePage() {
       return;
     }
     
-    const hasRequiredData = user && callStartTimeRef.current;
+    const hasRequiredData = user && callStartTimeRef.current !== null;
     
     if (hasRequiredData) {
       const endTime = Date.now();
-      const callDuration = Math.floor((endTime - callStartTimeRef.current) / 1000);
+      const callDuration = Math.floor((endTime - callStartTimeRef.current!) / 1000);
       
       if (callDuration > 0) {
         try {

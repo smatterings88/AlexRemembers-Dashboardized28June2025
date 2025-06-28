@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
-import { getWalletBalance, formatSecondsToMinutes, loadMinutes } from '../lib/wallet';
-import { Wallet, Plus, RefreshCw } from 'lucide-react';
+import { getWalletBalance, formatSecondsToMinutes } from '../lib/wallet';
+import { Wallet, RefreshCw } from 'lucide-react';
 
 interface WalletDisplayProps {
   userId: string;
@@ -11,7 +11,6 @@ export default function WalletDisplay({ userId, onBalanceUpdate }: WalletDisplay
   const [balance, setBalance] = useState<number>(0);
   const [isLoading, setIsLoading] = useState(true);
   const [isRefreshing, setIsRefreshing] = useState(false);
-  const [isAddingMinutes, setIsAddingMinutes] = useState(false);
 
   const fetchBalance = async (isRefresh = false) => {
     if (isRefresh) {
@@ -44,16 +43,8 @@ export default function WalletDisplay({ userId, onBalanceUpdate }: WalletDisplay
     fetchBalance(true);
   };
 
-  const handleAddMinutes = async (minutes: number) => {
-    setIsAddingMinutes(true);
-    try {
-      await loadMinutes(userId, minutes);
-      await fetchBalance(true);
-    } catch (error) {
-      console.error('Error adding minutes:', error);
-    } finally {
-      setIsAddingMinutes(false);
-    }
+  const handleChoosePlan = () => {
+    window.open('https://alexlistens.com/pricing', '_blank');
   };
 
   const getBalanceColor = () => {
@@ -115,33 +106,13 @@ export default function WalletDisplay({ userId, onBalanceUpdate }: WalletDisplay
       </div>
 
       <div className="space-y-2">
-        <p className="text-sm font-medium text-gray-700 mb-3">Quick Add:</p>
-        <div className="grid grid-cols-3 gap-2">
-          <button
-            onClick={() => handleAddMinutes(10)}
-            disabled={isAddingMinutes}
-            className="flex items-center justify-center space-x-1 px-3 py-2 bg-[#2C74B3] text-white rounded-lg hover:bg-[#205295] transition-colors text-sm font-medium disabled:opacity-50"
-          >
-            <Plus className="w-3 h-3" />
-            <span>10m</span>
-          </button>
-          <button
-            onClick={() => handleAddMinutes(30)}
-            disabled={isAddingMinutes}
-            className="flex items-center justify-center space-x-1 px-3 py-2 bg-[#2C74B3] text-white rounded-lg hover:bg-[#205295] transition-colors text-sm font-medium disabled:opacity-50"
-          >
-            <Plus className="w-3 h-3" />
-            <span>30m</span>
-          </button>
-          <button
-            onClick={() => handleAddMinutes(60)}
-            disabled={isAddingMinutes}
-            className="flex items-center justify-center space-x-1 px-3 py-2 bg-[#2C74B3] text-white rounded-lg hover:bg-[#205295] transition-colors text-sm font-medium disabled:opacity-50"
-          >
-            <Plus className="w-3 h-3" />
-            <span>60m</span>
-          </button>
-        </div>
+        <p className="text-sm font-medium text-gray-700 mb-3">Alex Listens Plans:</p>
+        <button
+          onClick={handleChoosePlan}
+          className="w-full flex items-center justify-center px-4 py-3 bg-[#2C74B3] text-white rounded-lg hover:bg-[#205295] transition-colors text-sm font-medium"
+        >
+          Choose Your Perfect Plan
+        </button>
       </div>
 
       {balance <= 60 && (
